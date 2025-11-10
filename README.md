@@ -56,7 +56,6 @@
       - **Submission Files:** Upon completion, two final submission files will be generated in the root directory: `submission_lgbmcbnn.csv` (from the L1 LGBM-Meta) and `last_soumission.csv` (from the L1 KerasNN-Meta).
       - **Visualizations:** The optional cells at the end of the notebook will generate and save OOF confusion matrices, L0 feature importance plots, and learning curves as `.png` files.
 
-
 # Prédiction de Popularité Spotify - Blending de Modèles
 
 Ce projet a pour objectif de prédire la popularité de chansons Spotify (tâche de régression) dans le cadre d'un Data Challenge Kaggle.
@@ -66,22 +65,6 @@ L'approche principale est un "blending" (ou empilement) de plusieurs modèles de
 ## Structure du Projet
 
 Le code est entièrement contenu dans le notebook Jupyter `spotify_blending.ipynb`.
-
-Le processus est le suivant :
-
-1. **Chargement et Nettoyage :** Lecture des données d'entraînement (`spotify_train_data.csv`) et de test (`spotify_test_data.csv`).
-2. **Feature Engineering :** Création de nouvelles caractéristiques (features) pertinentes, telles que des transformations logarithmiques (pour `duration` et `tempo`), des interactions entre features (ex: `danceability * energy`), et l'encodage cyclique (pour la tonalité `key`).
-3. **Entraînement des Modèles de Base (Niveau 1) :** Plusieurs modèles sont entraînés en utilisant une stratégie de validation croisée (K-Fold, 5 plis) pour générer des prédictions "Out-of-Fold" (OOF). Cette méthode permet d'utiliser les prédictions comme nouvelles features pour le modèle de niveau 2 tout en évitant la fuite de données (data leakage).
-   - LightGBM (LGBM)
-   - XGBoost (XGB) - *Moyenne de plusieurs modèles avec différentes graines aléatoires (bagging).*
-   - Random Forest (RF) - *Moyenne de plusieurs graines.*
-   - Extra Trees (ET) - *Moyenne de plusieurs graines.*
-   - CatBoost
-4. **Blending (Modèle de Niveau 2) :** Les prédictions OOF des modèles de base sont utilisées comme features pour entraîner un méta-modèle (un "blender"). Plusieurs types de blenders sont testés :
-   - `RidgeCV` (Régression Ridge avec validation croisée) sur 4 modèles (LGBM, XGB, RF, ET).
-   - `NNLS` (Non-Negative Least Squares) sur ces 4 mêmes modèles.
-   - `RidgeCV` sur un sous-ensemble de 2 modèles (XGB, ET).
-5. **Soumission :** Le code génère plusieurs fichiers de soumission (`.csv`) basés sur les différentes stratégies de blending.
 
 ## Prérequis
 
@@ -112,14 +95,14 @@ train = pd.read_csv("spotify_train_data.csv")
 test  = pd.read_csv("spotify_test_data.csv")
 ```
 
-*Remplacez `"spotify_train_data.csv"` par le chemin d'accès complet à votre fichier (ex: `"data/spotify_train_data.csv"`).*
+_Remplacez `"spotify_train_data.csv"` par le chemin d'accès complet à votre fichier (ex: `"data/spotify_train_data.csv"`)._
 
 ### 2. Exécution du Notebook
 
 1. Ouvrez le notebook `spotify_blending.ipynb` dans un environnement Jupyter (Jupyter Lab, Jupyter Notebook, ou Google Colab).
 2. Exécutez toutes les cellules dans l'ordre, de haut en bas ("Run All").
 
-*Note : L'entraînement des modèles (en particulier les modèles multi-graines comme Random Forest et XGBoost, ainsi que CatBoost) peut prendre un temps considérable en fonction de votre machine.*
+_Note : L'entraînement des modèles (en particulier les modèles multi-graines comme Random Forest et XGBoost, ainsi que CatBoost) peut prendre un temps considérable en fonction de votre machine._
 
 ### 3. Résultats et Soumissions
 
@@ -130,4 +113,3 @@ Les fichiers de soumission suivants seront créés dans le répertoire principal
 - `submission_0911_cat.csv` (Blend RidgeCV de 4 modèles : LGBM, XGB, RF, ET)
 - `submission_nnls.csv` (Blend NNLS des 4 mêmes modèles)
 - `submission_xgb_et.csv` (Blend RidgeCV de 2 modèles : XGB, ET)
-
