@@ -131,16 +131,3 @@ Les fichiers de soumission suivants seront créés dans le répertoire principal
 - `submission_nnls.csv` (Blend NNLS des 4 mêmes modèles)
 - `submission_xgb_et.csv` (Blend RidgeCV de 2 modèles : XGB, ET)
 
-## Lisibilité du Code
-
-Le notebook est structuré de manière séquentielle pour une lisibilité maximale :
-
-- **Cellule 1 :** Imports, configuration et installation des dépendances.
-- **Cellule 2 :** Chargement, Feature Engineering et définition des fonctions de pré-traitement (Target Encoding, Imputation).
-- **Cellule 3 :** Définition des paramètres pour les modèles de base.
-- **Cellules 4-5 :** Fonctions d'entraînement OOF (`train_oof_model`, `train_oof_multi`), qui gèrent la validation croisée et l'arrêt précoce (early stopping).
-- **Cellules 6-8 :** Entraînement de chaque modèle de base (LGBM, XGB, RF, ET, CatBoost).
-- **Cellules 9-12 :** Blending (Niveau 2) et génération des fichiers de soumission.
-- **Cellules 13-17 :** Analyse et visualisation des résultats (performances OOF, importance des features, etc.).
-
-Le code est commenté pour expliquer les étapes clés, notamment la stratégie d'encodage (Target Encoding) pour éviter le *data leakage*.
